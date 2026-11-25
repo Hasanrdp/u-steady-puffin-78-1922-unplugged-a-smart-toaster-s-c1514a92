@@ -33,7 +33,7 @@ def verify(path, data):
         raise SystemExit("entry.txt on disk does not match the text")
     if hashlib.sha256(written).hexdigest() != EXPECTED_SHA256:
         raise SystemExit("entry.txt sha256 does not match its pinned value")
-    return written
+    return True
 
 
 def build_output():
@@ -53,7 +53,9 @@ def main():
     path = os.path.join(out_dir, "entry.txt")
     with open(path, "wb") as f:
         f.write(data)
-    verify(path, data)
+    verified = verify(path, data)
+    if not verified:
+        return 1
     return path
 
 
